@@ -1,0 +1,51 @@
+#include "bb2.hpp"
+#include <mcl/bn256.hpp>
+#include <string>
+#include <iostream>
+#include <fstream>
+
+using namespace mcl::bn256;
+using namespace BB2;
+
+int main(){
+  KGC kgc;
+  std::cout << "KGC setup" << std::endl;
+  KGCParams params = kgc.getParams();
+  std::cout << "params: " << std::endl;
+  std::cout << "  G: " << params.G.getStr(16) << std::endl;
+  std::cout << "  X: " << params.X.getStr(16) << std::endl;
+  std::cout << "  Y: " << params.Y.getStr(16) << std::endl;
+  std::cout << "  v: " << params.v.getStr(16) << std::endl;
+
+  std::string id = "okumura";
+  std::cout << "id: " << id << std::endl;
+  std::ifstream ifs("./len_std.jpg", std::ios::in|std::ios::binary);
+  ifs.seekg(0, std::fstream::end);
+  auto eof = ifs.tellg();
+  ifs.clear();
+  ifs.seekg(0, std::fstream::beg);
+  auto beg = ifs.tellg();
+  auto size = eof - beg;
+  std::vector<unsigned char> data(size, 0);
+  char hoge;
+  for(uint i = 0; !ifs.eof(); i++){
+    ifs.read((char *)&data[i], 1);
+  }
+  ifs.close();
+
+  User sender;
+  Cipher cipher = sender.encrypt(data, id, params);
+
+  std::string a(cipher.a.begin(), cipher.a.end());
+  std::cout << "cipher: " << std::endl;
+  std::cout << "  a: " << a << std::endl;
+  std::cout << "  B: " << cipher.B.getStr(16) << std::endl;
+  std::cout << "  C: " << cipher.C.getStr(16) << std::endl;
+
+  User recipient(id, kgc);
+  std::vector<unsigned char> plain = recipient.decrypt(cipher);
+  std::ofstream ofs("./len_std.jpg.plain", std::ios::out|std::ios::binary|std::ios::trunc);
+  for(unsigned char i : plain){
+    ofs.write((char *)&i, 1);
+  }
+}

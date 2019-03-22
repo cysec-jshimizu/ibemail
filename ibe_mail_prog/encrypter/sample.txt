@@ -1,0 +1,7 @@
+From: okumura@sakura.cysec-lab.org
+To: okumura@sub1.cysec-lab.org
+Message-Id: <20190128014711.5D416A238C@sakura.cysec-lab.org>
+Date: Mon, 28 Jan 2019 10:47:11 +0900 (JST)
+Subject: testMail
+
+It is a test mail.
