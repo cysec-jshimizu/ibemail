@@ -28,5 +28,10 @@ all: clean $(TARGET)
 clean:
 	-rm -f $(OBJECTS) $(DEPENDS) $(TARGET)
 
+install:
+	rm -fv $(OBJDIR)/libibemailtmp.a
+	ar r $(OBJDIR)/libibemailtmp.a $(OBJDIR)/*.o
+	echo -n -e "create $(OBJDIR)/libibemail.a\naddlib $(OBJDIR)/libibemailtmp.a\naddlib lib/libmimetic.a\nsave\nend" | ar -M
+
 -include $(DEPENDS)
 
