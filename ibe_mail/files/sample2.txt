@@ -1,0 +1,25 @@
+Return-Path: taro@anywhare.**.jp
+Received: from smtp.anywhare.**.jp (smtp.anywhare.**.jp [219.219.219.1])
+  by smtp1.kaisya.**.jp (8.8.8/8.8.8) with ESMTP id 
+EAA13892;
+  Mon, 19 Feb 2001 05:47:59 +0900 (JST)
+  (envelope-from taro@anywhare.**.jp)
+Received: from taropc (taropc.anywhare.**.jp [219.199.199.199]) 
+  by smtp.anywhare.**.jp (8.9.3/3.7W) with ESMTP id 
+EAA26267
+  ; Mon, 19 Feb 2001 05:48:31 +0900 (JST)
+Date: Mon, 19 Feb 2001 05:46:28 +0900
+From: "Taro Yamada" <taro@anywhare.**.jp>
+To: "Hanako Suzuki" <hanako@kaisya.**.jp>
+Subject: 画像です
+Message-Id: <20010219054950.8032@anywhare.**.jp>MIME-Version: 1.0
+Content-Type: image/gif;
+  name="＠ＩＴロゴマーク.gif"
+Content-Disposition: attachment;
+  filename="＠ＩＴロゴマーク.gif"
+Content-Transfer-Encoding: base64
+X-Mailer: Becky! ver. 2.00
+X-UIDL: c77a7ce4659ef0977f1ec2cc1574344b 
+R0lGODlhcwA4AOYAAP/////++Pj9+/749fn49/H2+eX27+/v7+H07N3z6eXs8dXw5OLl6N/l68/u
+4Nfi7Mjs3NXe5sTq2tjb4L3n1bjm0tDY4czY5bTkz67iy8jS3Krgx8zMzKXexMHI1Jrbv7fG1rnE
+0JbZvJDXt7i/x4vWta29zobUsqS70ofRrKu4xaS3y3zQq6S0xaCzx3LMpZyvw52vwW7LombMmZSq
