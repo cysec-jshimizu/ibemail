@@ -1,6 +1,6 @@
 COMPILER  = g++
 CFLAGS    = -g -MMD -MP -Wall -Wextra -Winit-self -Wno-missing-field-initializers -std=c++11
-LDFLAGS   = -lmcl -lmpzutil
+LDFLAGS   = -lmcl
 LIBS      = -lgmp -lcrypto
 INCLUDE   = -I./include -I/usr/local/include
 TARGET    = ./bin/$(shell basename `readlink -f .`)
@@ -15,6 +15,7 @@ ifeq "$(strip $(OBJDIR))" ""
 endif
 OBJECTS   = $(addprefix $(OBJDIR)/, $(notdir $(SOURCES:.cpp=.o)))
 DEPENDS   = $(OBJECTS:.o=.d)
+MAKELIB   = $(OBJDIR)/libbb2.a
 
 $(TARGET): $(OBJECTS) $(LIBS)
 	$(COMPILER) -o $@ $^ $(LDFLAGS)
@@ -26,12 +27,12 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 all: clean $(TARGET)
 
 install:
-	install $(SRCDIR)/bb2.hpp ~/.clib/include/bb2.hpp
-	ar r $(OBJDIR)/libbb2.a $(OBJECTS) $(OBJDIR)/mpz_util.o
-	install -s $(OBJDIR)/libbb2.a ~/.clib/lib/libbb2.a
+	-rm -f $(MAKELIB)
+	make $(TARGET)
+	ar r $(MAKELIB) $(OBJECTS)
 
 clean:
-	-rm -f $(OBJECTS) $(DEPENDS) $(TARGET)
+	-rm -f $(OBJECTS) $(DEPENDS) $(TARGET) $(MAKELIB)
 
 -include $(DEPENDS)
 

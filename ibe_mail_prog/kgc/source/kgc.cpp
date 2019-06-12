@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <openssl/sha.h>
+
 using namespace std;
 using namespace IBEMail;
 
@@ -72,4 +74,13 @@ void genUserKey(string id){
   MailKGC kgc(param, mkey);
   IBEUserKey ukey = kgc.genUserKey(id);
   ukeyFile << ukey.getBase64() << endl;
+}
+
+/* コンパイルエラー回避
+ * libibe_mailがlibcryptoを使用するものの
+ * ここのコードでは使われないため，リンカが不要と見てリンクしないっぽい？？
+ * libcryptoの関数を呼び出すことで回避できる
+ * ちゃんとした解決方法が見つかれば消す */
+void avoid_error(){
+  SHA256_Init(NULL);
 }

@@ -2,6 +2,7 @@
 #define _INC_BB2
 
 #include <mcl/bn256.hpp>
+#include <openssl/sha.h>
 
 namespace BB2{
   struct KGCParams{

@@ -1,6 +1,6 @@
 COMPILER  = g++
 CFLAGS    = -g -MMD -MP -Wall -Wextra -Winit-self -Wno-missing-field-initializers -std=c++11
-LDFLAGS   = -L./lib -lmcl -libemail -lresolv
+LDFLAGS   = -L./lib -libemail -lmcl -lresolv -lmimetic
 LIBS      = -lgmp -lcrypto -lssl
 INCLUDE   = -I./include -I/usr/local/include
 TARGET    = ./bin/$(shell basename `readlink -f .`)

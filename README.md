@@ -12,6 +12,7 @@ IDベース暗号を用いた電子メールシステム
 
 * ibe_mail_prog
   * 実際に動かすプログラムたち
+  * makeする前にibe_mailの方でmake installする
 
 ## 必要ライブラリ
 
