@@ -7,7 +7,7 @@
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 
-using namespace mcl::bn256;
+using namespace mcl::bn512;
 using namespace BB2;
 using namespace IBEMail;
 using namespace std;

@@ -1,6 +1,6 @@
 #include "bb2.hpp"
 
-using namespace mcl::bn256;
+using namespace mcl::bn512;
 
 namespace BB2{
   KGCParams::KGCParams(const G1 G, const G1 X, const G1 Y, const Fp12 v){
@@ -32,6 +32,8 @@ namespace BB2{
   }
 
   void initBB2(){
-    mcl::bn256::initPairing();
+    // initPairing(mcl::BN462);
+    // initPairing(mcl::BN381_1);
+    initPairing(mcl::BN381_2);
   }
 }

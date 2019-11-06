@@ -6,7 +6,7 @@
 
 #define EMBEDDED_DEGREE 12
 
-using namespace mcl::bn256;
+using namespace mcl::bn512;
 
 namespace BB2{
   //Fp12 -> bytes

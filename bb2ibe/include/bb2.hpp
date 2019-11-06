@@ -1,46 +1,46 @@
 #ifndef _INC_BB2
 #define _INC_BB2
 
-#include <mcl/bn256.hpp>
+#include <mcl/bn512.hpp>
 #include <openssl/sha.h>
 
 namespace BB2{
   struct KGCParams{
-    mcl::bn256::G1 G;
-    mcl::bn256::G1 X;
-    mcl::bn256::G1 Y;
-    mcl::bn256::Fp12 v;
+    mcl::bn512::G1 G;
+    mcl::bn512::G1 X;
+    mcl::bn512::G1 Y;
+    mcl::bn512::Fp12 v;
 
     KGCParams() = default;
-    KGCParams(const mcl::bn256::G1 G, const mcl::bn256::G1 X, const mcl::bn256::G1 Y, const mcl::bn256::Fp12 v);
+    KGCParams(const mcl::bn512::G1 G, const mcl::bn512::G1 X, const mcl::bn512::G1 Y, const mcl::bn512::Fp12 v);
 
     bool operator==(const KGCParams &params) const;
   };
 
   struct KGCMasterKey{
-    mcl::bn256::Fr x;
-    mcl::bn256::Fr y;
-    mcl::bn256::G2 H;
+    mcl::bn512::Fr x;
+    mcl::bn512::Fr y;
+    mcl::bn512::G2 H;
 
     KGCMasterKey() = default;
-    KGCMasterKey(const mcl::bn256::Fr x, const mcl::bn256::Fr y, const mcl::bn256::G2 H);
+    KGCMasterKey(const mcl::bn512::Fr x, const mcl::bn512::Fr y, const mcl::bn512::G2 H);
   };
 
   struct UserKey{
-    mcl::bn256::Fr r;
-    mcl::bn256::G2 K;
+    mcl::bn512::Fr r;
+    mcl::bn512::G2 K;
 
     UserKey() = default;
-    UserKey(const mcl::bn256::Fr r, const mcl::bn256::G2 K);
+    UserKey(const mcl::bn512::Fr r, const mcl::bn512::G2 K);
   };
 
   struct Cipher{
     std::vector<unsigned char> a;
-    mcl::bn256::G1 B;
-    mcl::bn256::G1 C;
+    mcl::bn512::G1 B;
+    mcl::bn512::G1 C;
 
     Cipher() = default;
-    Cipher(const std::vector<unsigned char> a, const mcl::bn256::G1 B, const mcl::bn256::G1 C);
+    Cipher(const std::vector<unsigned char> a, const mcl::bn512::G1 B, const mcl::bn512::G1 C);
   };
 
   class KGC{
@@ -85,7 +85,7 @@ namespace BB2{
 
   void initBB2();
 
-  void canonical(std::vector<unsigned char>& s, const mcl::bn256::Fp12 &v, int o=0);
+  void canonical(std::vector<unsigned char>& s, const mcl::bn512::Fp12 &v, int o=0);
 
   void hashToRange(mpz_class& v, const std::vector<unsigned char> &s, const mpz_class &n);
 }

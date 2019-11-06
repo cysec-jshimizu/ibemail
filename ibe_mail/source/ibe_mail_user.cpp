@@ -12,7 +12,7 @@
 #include <mimetic/mimetic.h>
 #include <mimetic/utils.h>
 
-using namespace mcl::bn256;
+using namespace mcl::bn512;
 using namespace std;
 
 namespace IBEMail{

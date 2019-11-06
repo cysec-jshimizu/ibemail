@@ -8,7 +8,7 @@
 #include <resolv.h>
 #include <unordered_map>
 
-using namespace mcl::bn256;
+using namespace mcl::bn512;
 using namespace std;
 
 

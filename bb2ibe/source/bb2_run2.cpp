@@ -1,9 +1,9 @@
 #include "bb2.hpp"
-#include <mcl/bn256.hpp>
+#include <mcl/bn512.hpp>
 #include <string>
 #include <iostream>
 
-using namespace mcl::bn256;
+using namespace mcl::bn512;
 using namespace BB2;
 
 int main(){
