@@ -5,7 +5,7 @@
 #include <string>
 #include <openssl/sha.h>
 
-using namespace mcl::bn512;
+using namespace mcl::bn384;
 
 namespace BB2{
   KGC::KGC(bool set){

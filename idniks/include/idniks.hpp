@@ -1,46 +1,41 @@
-#ifndef _INC_BB2
-#define _INC_BB2
+#ifndef _INC_IDNIKS
+#define _INC_IDNIKS
 
 #include <mcl/bn384.hpp>
 #include <openssl/sha.h>
 
-namespace BB2{
+namespace IDNIKS{
   struct KGCParams{
-    mcl::bn384::G1 G;
-    mcl::bn384::G1 X;
-    mcl::bn384::G1 Y;
-    mcl::bn384::Fp12 v;
+    mcl::bn384::G1 P;
+    mcl::bn384::G2 Q;
+    mcl::bn384::G2 lQ;
 
     KGCParams() = default;
-    KGCParams(const mcl::bn384::G1 G, const mcl::bn384::G1 X, const mcl::bn384::G1 Y, const mcl::bn384::Fp12 v);
+    KGCParams(const mcl::bn384::G1 P, const mcl::bn384::G2 Q, const mcl::bn384::G2 lQ);
 
     bool operator==(const KGCParams &params) const;
   };
 
   struct KGCMasterKey{
-    mcl::bn384::Fr x;
-    mcl::bn384::Fr y;
-    mcl::bn384::G2 H;
+    mcl::bn384::Fr l;
 
     KGCMasterKey() = default;
-    KGCMasterKey(const mcl::bn384::Fr x, const mcl::bn384::Fr y, const mcl::bn384::G2 H);
+    KGCMasterKey(const mcl::bn384::Fr l);
   };
 
   struct UserKey{
-    mcl::bn384::Fr r;
-    mcl::bn384::G2 K;
+    mcl::bn384::G1 Ku;
 
     UserKey() = default;
-    UserKey(const mcl::bn384::Fr r, const mcl::bn384::G2 K);
+    UserKey(const mcl::bn384::G1 Ku);
   };
 
   struct Cipher{
-    std::vector<unsigned char> a;
-    mcl::bn384::G1 B;
-    mcl::bn384::G1 C;
+    mcl::bn384::G2 C1;
+    std::vector<unsigned char> C2;
 
     Cipher() = default;
-    Cipher(const std::vector<unsigned char> a, const mcl::bn384::G1 B, const mcl::bn384::G1 C);
+    Cipher(const mcl::bn384::G2 C1, const std::vector<unsigned char> C2);
   };
 
   class KGC{
@@ -83,7 +78,7 @@ namespace BB2{
       bool isBelong() const{ return belong; };
   };
 
-  void initBB2();
+  void initIDNIKS();
 
   void canonical(std::vector<unsigned char>& s, const mcl::bn384::Fp12 &v, int o=0);
 

@@ -1,6 +1,6 @@
 #include "bb2.hpp"
 
-using namespace mcl::bn512;
+using namespace mcl::bn384;
 
 namespace BB2{
   KGCParams::KGCParams(const G1 G, const G1 X, const G1 Y, const Fp12 v){

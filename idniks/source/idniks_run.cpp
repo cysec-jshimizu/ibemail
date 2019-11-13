@@ -1,35 +1,34 @@
-#include "bb2.hpp"
+#include "idniks.hpp"
 #include <mcl/bn384.hpp>
 #include <string>
 #include <iostream>
 
 using namespace mcl::bn384;
-using namespace BB2;
+using namespace IDNIKS;
 
 int main(){
-  initBB2();
+  initIDNIKS();
   KGC kgc;
   std::cout << "KGC setup" << std::endl;
   KGCParams params = kgc.getParams();
   std::cout << "params: " << std::endl;
-  std::cout << "  G: " << params.G.getStr(16) << std::endl;
-  std::cout << "  X: " << params.X.getStr(16) << std::endl;
-  std::cout << "  Y: " << params.Y.getStr(16) << std::endl;
-  std::cout << "  v: " << params.v.getStr(16) << std::endl;
+  std::cout << "  P: " << params.P.getStr(16) << std::endl;
+  std::cout << "  Q: " << params.Q.getStr(16) << std::endl;
+  std::cout << "  lQ: " << params.lQ.getStr(16) << std::endl;
 
-  std::string id = "okumura";
+  std::string id = "k.kobayashi";
   std::cout << "id: " << id << std::endl;
   std::string msg = "plaintext";
   std::cout << msg << std::endl;
   std::vector<unsigned char> data(msg.begin(), msg.end());
 
   Cipher cipher = User::encrypt(data, id, params);
+  std::cout << std::endl; 
 
-  std::string a(cipher.a.begin(), cipher.a.end());
+  std::string C2(cipher.C2.begin(), cipher.C2.end());
   std::cout << "cipher: " << std::endl;
-  //std::cout << "  a: " << a << std::endl;
-  std::cout << "  B: " << cipher.B.getStr(16) << std::endl;
-  std::cout << "  C: " << cipher.C.getStr(16) << std::endl;
+  std::cout << "  C1: " << cipher.C1.getStr(16) << std::endl;
+  std::cout << "  C2: " << C2 << std::endl;
 
   User recipient(id, kgc.getParams(), kgc.genUserKey(id));
   std::vector<unsigned char> plain = recipient.decrypt(cipher);

@@ -1,4 +1,4 @@
-#include "bb2.hpp"
+#include "idniks.hpp"
 #include <mpz_util.hpp>
 #include <string>
 #include <stdexcept>
@@ -8,7 +8,7 @@
 
 using namespace mcl::bn384;
 
-namespace BB2{
+namespace IDNIKS{
   //Fp12 -> bytes
   void canonical(std::vector<unsigned char> &s, const Fp12 &v, int o){
     mpz_class p(Fp::getModulo());
@@ -109,13 +109,13 @@ namespace BB2{
   }
 
   Cipher User::encrypt(const std::vector<unsigned char> &msg, const std::string &id, const KGCParams &params, size_t n, bool withPadding){
-    if(n < msg.size()) throw std::invalid_argument("BB2::User::encrypt: n less than sizeof msg");
+    if(n < msg.size()) throw std::invalid_argument("IDNIKS::User::encrypt: n less than sizeof msg");
 
     //padding
     unsigned int pad = 0;
     if(withPadding){
       pad = n - msg.size();
-      if(pad > UCHAR_MAX || (pad == 0 && n > UCHAR_MAX)) throw std::runtime_error("BB2::User::encrypt: too large padding");
+      if(pad > UCHAR_MAX || (pad == 0 && n > UCHAR_MAX)) throw std::runtime_error("IDNIKS::User::encrypt: too large padding");
       if(pad == 0){
         pad = n;
         n *= 2;
@@ -128,55 +128,55 @@ namespace BB2{
     mpz_class m_mpz;
     mpzUtil::bytesToMpz(m_mpz, m);
 
+    //choice r random
+    mpz_class rndr;
+    mpz_class modFr(Fr::getModulo());
+    mpzUtil::mpzRandDevice(rndr, modFr);
+    Fr r(rndr.get_str());
+
     //hash(id)
     std::vector<unsigned char> id_hash(SHA256_DIGEST_LENGTH, 0);
     SHA256_CTX sha256;
     SHA256_Init(&sha256);
     SHA256_Update(&sha256, id.data(), id.size());
     SHA256_Final(id_hash.data(), &sha256);
-    //id: bytes to mpz_class
+    //id: bytes to Fr
     mpz_class id_mpz;
     mpzUtil::bytesToMpz(id_mpz, id_hash);
-    //id: mpz_class to Fr
     mpz_class mod(Fr::getModulo());
     id_mpz %= mod;
     Fr id_fp(id_mpz.get_str());
 
-    //choice s random
-    mpz_class rnds;
-    mpz_class modFr(Fr::getModulo());
-    mpzUtil::mpzRandDevice(rnds, modFr);
-    Fr s(rnds.get_str());
-
     //encrypt
-    //a = m `xor` hash(canonical(v^s))
-    Fp12 vs;
-    Fp12::pow(vs, params.v, s);
+    // C1 = rQ
+    G2 C1;
+    G2::mul(C1, params.Q, r);
+
+    // C2 = m `xor` e(Pu, r*lQ)
+    //    = m `xor` e(Pu, Q)^rl
+    std::vector<unsigned char> C2;
+    // Pu : h(id)P
+    G1 Pu;
+    G1::mul(Pu, params.P, id_fp);
+    // rlQ
+    G2 rlQ;
+    G2::mul(rlQ, params.lQ, r);
+    // pairing
+    Fp12 e;
+    pairing(e, Pu, rlQ);
+    // canonical e
     std::vector<unsigned char> can;
-    canonical(can, vs, 0);
+    canonical(can, e, 0);
     mpz_class hash;
     mpz_class bytelen;
     mpz_ui_pow_ui(bytelen.get_mpz_t(), UCHAR_MAX+1, n);
     hashToRange(hash, can, bytelen);
     mpz_class cipher = m_mpz ^ hash;
-    std::vector<unsigned char> a;
-    mpzUtil::mpzToBytes(a, cipher, n);
+    // C2
+    mpzUtil::mpzToBytes(C2, cipher, n);
 
-    //B = sY
-    G1 B;
-    G1::mul(B, params.Y, s);
 
-    //C = sX + (s*id)G
-    Fr sid;
-    Fr::mul(sid, s, id_fp);
-    G1 sX;
-    G1::mul(sX, params.X, s);
-    G1 sidG;
-    G1::mul(sidG, params.G, sid);
-    G1 C;
-    G1::add(C, sX, sidG);
-
-    return {a, B, C};
+    return {C1, C2};
   }
 
   Cipher User::encrypt(const std::vector<unsigned char> &msg, const std::string &id, const KGCParams &params, bool withPadding){
@@ -184,42 +184,39 @@ namespace BB2{
   }
 
   Cipher User::encrypt(const std::vector<unsigned char> &msg, const std::string &id, size_t n, bool withPadding) const{
-    if(!belong) throw std::runtime_error("BB2::User::encrypt: user don't belong to any KGC");
+    if(!belong) throw std::runtime_error("IDNIKS::User::encrypt: user don't belong to any KGC");
     return encrypt(msg, id, this->params, n, withPadding);
   }
 
   Cipher User::encrypt(const std::vector<unsigned char> &msg, const std::string &id, bool withPadding) const{
-    if(!belong) throw std::runtime_error("BB2::User::encrypt: user don't belong to any KGC");
+    if(!belong) throw std::runtime_error("IDNIKS::User::encrypt: user don't belong to any KGC");
     return encrypt(msg, id, this->params, msg.size(), withPadding);
   }
 
   std::vector<unsigned char> User::decrypt(const Cipher &c, size_t n, bool withPadding) const{
-    if(!belong) throw std::runtime_error("BB2::User::decrypt: user don't have key");
+    if(!belong) throw std::runtime_error("IDNIKS::User::decrypt: user don't have key");
 
-    std::vector<unsigned char> a = c.a;
-    G1 B = c.B;
-    G1 C = c.C;
+    // decrypto
+    // m = C2 `xor` e(Ku,C1)
+    //   = C2 `xor` e(Pu,Q)^lr `xor` e(l*Pu, r*Q)
+    G2 C1 = c.C1;
+    std::vector<unsigned char> C2 = c.C2;
 
-    Fr r = this->decKey.r;
-    G2 K = this->decKey.K;
+    G1 Ku = this->decKey.Ku;
+    // pairing
+    Fp12 e;
+    pairing(e, Ku, C1);
 
-    //e(rB + C, K) = v^s
-    G1 left;
-    G1::mul(left, B, r);
-    G1::add(left, left, C);
-    Fp12 vs;
-    pairing(vs, left, K);
-
-    //a `xor` hash(canonical(v^s)) = m
+    //C2 `xor` e = m
     std::vector<unsigned char> can;
-    canonical(can, vs);
+    canonical(can, e);
+    mpz_class hash;
     mpz_class bytelen;
     mpz_ui_pow_ui(bytelen.get_mpz_t(), UCHAR_MAX+1, n);
-    mpz_class hash;
     hashToRange(hash, can, bytelen);
-    mpz_class a_mpz;
-    mpzUtil::bytesToMpz(a_mpz, a);
-    mpz_class p_mpz = a_mpz ^ hash;
+    mpz_class C2_mpz;
+    mpzUtil::bytesToMpz(C2_mpz, C2);
+    mpz_class p_mpz = C2_mpz ^ hash;
     std::vector<unsigned char> p;
     mpzUtil::mpzToBytes(p, p_mpz, n);
 
@@ -236,6 +233,6 @@ namespace BB2{
   }
 
   std::vector<unsigned char> User::decrypt(const Cipher &c, bool withPadding) const{
-    return decrypt(c, c.a.size(), withPadding);
+    return decrypt(c, c.C2.size(), withPadding);
   }
 }
