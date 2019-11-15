@@ -5,7 +5,8 @@
 #include <string>
 #include <openssl/sha.h>
 
-using namespace mcl::bn384;
+using namespace mcl::bn256;
+// using namespace mcl::bn384;
 
 namespace IDNIKS{
   KGC::KGC(bool set){

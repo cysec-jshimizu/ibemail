@@ -1,41 +1,44 @@
 #ifndef _INC_IDNIKS
 #define _INC_IDNIKS
 
-#include <mcl/bn384.hpp>
+#include <mcl/bn256.hpp>
 #include <openssl/sha.h>
+
+using namespace mcl::bn256;
+// using namespace mcl::bn384;
 
 namespace IDNIKS{
   struct KGCParams{
-    mcl::bn384::G1 P;
-    mcl::bn384::G2 Q;
-    mcl::bn384::G2 lQ;
+    G1 P;
+    G2 Q;
+    G2 lQ;
 
     KGCParams() = default;
-    KGCParams(const mcl::bn384::G1 P, const mcl::bn384::G2 Q, const mcl::bn384::G2 lQ);
+    KGCParams(const G1 P, const G2 Q, const G2 lQ);
 
     bool operator==(const KGCParams &params) const;
   };
 
   struct KGCMasterKey{
-    mcl::bn384::Fr l;
+    Fr l;
 
     KGCMasterKey() = default;
-    KGCMasterKey(const mcl::bn384::Fr l);
+    KGCMasterKey(const Fr l);
   };
 
   struct UserKey{
-    mcl::bn384::G1 Ku;
+    G1 Ku;
 
     UserKey() = default;
-    UserKey(const mcl::bn384::G1 Ku);
+    UserKey(const G1 Ku);
   };
 
   struct Cipher{
-    mcl::bn384::G2 C1;
+    G2 C1;
     std::vector<unsigned char> C2;
 
     Cipher() = default;
-    Cipher(const mcl::bn384::G2 C1, const std::vector<unsigned char> C2);
+    Cipher(const G2 C1, const std::vector<unsigned char> C2);
   };
 
   class KGC{
@@ -80,7 +83,7 @@ namespace IDNIKS{
 
   void initIDNIKS();
 
-  void canonical(std::vector<unsigned char>& s, const mcl::bn384::Fp12 &v, int o=0);
+  void canonical(std::vector<unsigned char>& s, const Fp12 &v, int o=0);
 
   void hashToRange(mpz_class& v, const std::vector<unsigned char> &s, const mpz_class &n);
 }

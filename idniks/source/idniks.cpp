@@ -1,6 +1,7 @@
 #include "idniks.hpp"
 
-using namespace mcl::bn384;
+using namespace mcl::bn256;
+// using namespace mcl::bn384;
 
 namespace IDNIKS{
   KGCParams::KGCParams(const G1 P, const G2 Q, const G2 lQ){
@@ -28,7 +29,8 @@ namespace IDNIKS{
 
   void initIDNIKS(){
     // initPairing(mcl::BN462);
-    initPairing(mcl::BN381_1);
+    // initPairing(mcl::BN381_1);
     // initPairing(mcl::BN381_2);
+    initPairing(mcl::BN254);
   }
 }

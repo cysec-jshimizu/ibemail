@@ -3,7 +3,8 @@
 #include <string>
 #include <iostream>
 
-using namespace mcl::bn384;
+using namespace mcl::bn256;
+// using namespace mcl::bn384;
 using namespace IDNIKS;
 
 int main(){

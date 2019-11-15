@@ -1,6 +1,6 @@
-# bb2ibe
+# IDNIKSibe
 
-BB2IBE C++ program.
+IDNIKS IBE C++ program.
 
 ## require
 
