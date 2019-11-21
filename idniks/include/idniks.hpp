@@ -2,6 +2,7 @@
 #define _INC_IDNIKS
 
 #include <mcl/bn256.hpp>
+// #include <mcl/bn384.hpp>
 #include <openssl/sha.h>
 
 using namespace mcl::bn256;
