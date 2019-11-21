@@ -293,7 +293,6 @@ namespace IDNIKS{
 
     // S = aPu - bKu
     G1 S;
-    // G1::sub(S, aPu, bKu);
     G1::add(S, aPu, bKu);
 
     return {S, R};
