@@ -2,6 +2,7 @@
 #define _INC_IBEMAIL
 
 #include <bb2.hpp>
+// #include <idniks.hpp>
 #include <openssl/evp.h>
 #include <openssl/bio.h>
 
@@ -9,7 +10,8 @@
 namespace IBEMail{
   const std::string VERSION = "1.0";
   const std::string ALGOLITHM = "bb2";
-  const std::string CURVE = "bn381";
+  // const std::string ALGOLITHM = "IDNIKS";
+  const std::string CURVE = "bn254";
   const size_t FP_SIZE = 32;
 
   struct IBEParams : public BB2::KGCParams{

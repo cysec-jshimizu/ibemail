@@ -27,6 +27,11 @@ namespace IDNIKS{
     this->C2 = C2;
   }
 
+  Signature::Signature(const G1 S, const G2 R){
+    this->S = S;
+    this->R = R;
+  }
+
   void initIDNIKS(){
     // initPairing(mcl::BN462);
     // initPairing(mcl::BN381_1);

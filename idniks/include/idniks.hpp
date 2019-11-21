@@ -41,6 +41,14 @@ namespace IDNIKS{
     Cipher(const G2 C1, const std::vector<unsigned char> C2);
   };
 
+  struct Signature{
+    G1 S;
+    G2 R;
+
+    Signature() = default;
+    Signature(const G1 S, const G2 R);
+  };
+
   class KGC{
     private:
       KGCParams params;
@@ -76,6 +84,8 @@ namespace IDNIKS{
       Cipher encrypt(const std::vector<unsigned char> &msg, const std::string &id, bool withPadding=false) const;
       std::vector<unsigned char> decrypt(const Cipher &c, size_t n, bool withPadding=true) const;
       std::vector<unsigned char> decrypt(const Cipher &c, bool withPadding=false) const;
+      Signature signature(const std::vector<unsigned char> &msg) const;
+      static bool verification(const std::vector<unsigned char> &msg, const std::string &id, const KGCParams &params, Signature &sign);
       std::string getId() const{ return id; };
       UserKey getUserKey() const{ return decKey; };
       bool isBelong() const{ return belong; };

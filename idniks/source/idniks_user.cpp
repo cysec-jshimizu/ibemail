@@ -146,7 +146,7 @@ namespace IDNIKS{
     mpzUtil::bytesToMpz(id_mpz, id_hash);
     mpz_class mod(Fr::getModulo());
     id_mpz %= mod;
-    Fr id_fp(id_mpz.get_str());
+    Fr id_fr(id_mpz.get_str());
 
     //encrypt
     // C1 = rQ
@@ -158,7 +158,7 @@ namespace IDNIKS{
     std::vector<unsigned char> C2;
     // Pu : h(id)P
     G1 Pu;
-    G1::mul(Pu, params.P, id_fp);
+    G1::mul(Pu, params.P, id_fr);
     // rlQ
     G2 rlQ;
     G2::mul(rlQ, params.lQ, r);
@@ -235,5 +235,135 @@ namespace IDNIKS{
 
   std::vector<unsigned char> User::decrypt(const Cipher &c, bool withPadding) const{
     return decrypt(c, c.C2.size(), withPadding);
+  }
+
+  Signature User::signature(const std::vector<unsigned char> &msg) const{
+    if(!belong) throw std::runtime_error("IDNIKS::User::signature: user don't have key");
+
+    //hash(id)
+    std::vector<unsigned char> id_hash(SHA256_DIGEST_LENGTH, 0);
+    SHA256_CTX sha256;
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, this->id.data(), this->id.size());
+    SHA256_Final(id_hash.data(), &sha256);
+    //id: bytes to Fr
+    mpz_class id_mpz;
+    mpzUtil::bytesToMpz(id_mpz, id_hash);
+    mpz_class mod(Fr::getModulo());
+    id_mpz %= mod;
+    Fr id_fp(id_mpz.get_str());
+    // Pu : h(id)P
+    G1 Pu;
+    G1::mul(Pu, params.P, id_fp);
+
+    //choice k random
+    mpz_class rndk;
+    mpz_class modFr(Fr::getModulo());
+    mpzUtil::mpzRandDevice(rndk, modFr);
+    Fr k(rndk.get_str());
+
+    // R = k*Q
+    G2 R;
+    G2::mul(R, this->params.Q, k);
+
+    //hash(msg)
+    std::vector<unsigned char> msg_hash(SHA256_DIGEST_LENGTH, 0);
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, msg.data(), msg.size());
+    SHA256_Final(msg_hash.data(), &sha256);
+    //msg: bytes to Fr
+    mpz_class msg_mpz;
+    mpzUtil::bytesToMpz(msg_mpz, msg_hash);
+    msg_mpz %= mod;
+    Fr msg_fr(msg_mpz.get_str());
+    // h(m)/k
+    Fr a;
+    Fr::div(a, msg_fr, k);  
+    // a*Pu
+    G1 aPu;
+    G1::mul(aPu, Pu, a);
+    
+    // R.x/k
+    Fr x(R.x.getStr());
+    Fr b;
+    Fr::div(b, x, k);
+    // b*Ku
+    G1 bKu;
+    G1::mul(bKu, this->decKey.Ku, b);
+
+    // S = aPu - bKu
+    G1 S;
+    // G1::sub(S, aPu, bKu);
+    G1::add(S, aPu, bKu);
+
+    return {S, R};
+  }
+
+  bool User::verification(const std::vector<unsigned char> &msg, const std::string &id, const KGCParams &params, Signature &sign){
+    // verification
+    // e(S, R) == e(Pu, Q)^h(m) * e(Pu, lQ)^x
+    // x = R.x
+    // sign_fp12 == verify_fp12
+    // verify_fp12 = verify_fp12_a * verify_fp12_b
+
+    //hash(id)
+    std::vector<unsigned char> id_hash(SHA256_DIGEST_LENGTH, 0);
+    SHA256_CTX sha256;
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, id.data(), id.size());
+    SHA256_Final(id_hash.data(), &sha256);
+    //id: bytes to Fr
+    mpz_class id_mpz;
+    mpzUtil::bytesToMpz(id_mpz, id_hash);
+    mpz_class mod(Fr::getModulo());
+    id_mpz %= mod;
+    Fr id_fp(id_mpz.get_str());
+    // Pu : h(id)P
+    G1 Pu;
+    G1::mul(Pu, params.P, id_fp);
+
+    // e(S, R)
+    Fp12 sign_fp12;
+    pairing(sign_fp12, sign.S, sign.R);
+
+    // e(Pu, Q)^h(msg) * e(Pu, lQ)^x
+    // verify_fp12_a * verify_fp12_b = verify_fp12
+    Fp12 verify_fp12;
+    Fp12 verify_fp12_a;
+    Fp12 verify_fp12_b;
+
+    // verify_fp12_a = e(Pu, Q)^h(msg)
+    //               = e(Pu, h(msg)*Q)
+    // hash(msg)
+    std::vector<unsigned char> msg_hash(SHA256_DIGEST_LENGTH, 0);
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, msg.data(), msg.size());
+    SHA256_Final(msg_hash.data(), &sha256);
+    //msg: bytes to Fr
+    mpz_class msg_mpz;
+    mpzUtil::bytesToMpz(msg_mpz, msg_hash);
+    msg_mpz %= mod;
+    Fr msg_fr(msg_mpz.get_str());
+    // hQ : h(msg)Q
+    G2 hQ;
+    G2::mul(hQ, params.Q, msg_fr);
+    // pairing (Pu, Q^h(msg))
+    pairing(verify_fp12_a, Pu, hQ);
+
+    // verify_fp12_b = e(Pu, lQ)^x
+    //               = e(Pu, x*lQ)
+    // xlQ : x*lQ
+    // x = R.x
+    Fr x(sign.R.x.getStr());
+    G2 xlQ;
+    G2::mul(xlQ, params.lQ, x);
+    // pairing (Pu, xlQ)
+    pairing(verify_fp12_b, Pu, xlQ);
+
+    // verify_fp12 = verify_fp12_a * verify_fp12_b
+    Fp12::mul(verify_fp12, verify_fp12_a, verify_fp12_b);
+
+    // if(e(S, R) == e(Pu, Q)^h(m) * e(Pu, lQ)^x) ? true : false
+    return (sign_fp12 == verify_fp12);
   }
 }
