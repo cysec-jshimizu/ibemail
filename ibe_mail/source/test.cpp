@@ -1,4 +1,4 @@
-#include "ibe_mail.hpp"
+#include "ibe_mail_idniks.hpp"
 #include <base64.hpp>
 #include <string>
 #include <iostream>
@@ -7,8 +7,9 @@
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 
-using namespace mcl::bn384;
-using namespace BB2;
+// for "ibe_mail_bb2.hpp"
+// using namespace mcl::bn384;
+// using namespace BB2;
 using namespace IBEMail;
 using namespace std;
 
@@ -54,15 +55,15 @@ int main(){
   else cout << "params: ng";
   cout << endl;
 
-  string b64v;
-  Fp12EncodeBase64(b64v, params.v);
-  Fp12 v2;
-  Fp12DecodeBase64(v2, b64v);
-  if(params.v == v2) cout << "v: ok";
-  else cout << "v: ng";
-  cout << endl;
+  // string b64v;
+  // Fp12EncodeBase64(b64v, params.v);
+  // Fp12 v2;
+  // Fp12DecodeBase64(v2, b64v);
+  // if(params.v == v2) cout << "v: ok";
+  // else cout << "v: ng";
+  // cout << endl;
 
-  std::string id = "okumura";
+  std::string id = "k.kobayashi";
   std::cout << "id: " << id << std::endl;
   std::string msg = "It is a plaintext.";
   msg = msg + msg + msg;
