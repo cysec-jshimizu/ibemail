@@ -1,4 +1,4 @@
-#include "ibe_mail.hpp"
+#include "ibe_mail_bb2.hpp"
 #include <mpz_util.hpp>
 #include <base64.hpp>
 #include <dns_header.hpp>
