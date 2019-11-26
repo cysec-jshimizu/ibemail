@@ -1,6 +1,7 @@
-#include "ibe_mail.hpp"
+#include "ibe_mail_idniks.hpp"
 
-using namespace mcl::bn384;
+// for "ibe_mail_bb2.hpp"
+// using namespace mcl::bn384;
 using namespace std;
 
 namespace IBEMail{

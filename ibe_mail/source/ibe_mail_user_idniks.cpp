@@ -1,4 +1,4 @@
-#include "ibe_mail_bb2.hpp"
+#include "ibe_mail_idniks.hpp"
 #include <mpz_util.hpp>
 #include <base64.hpp>
 #include <openssl/evp.h>
@@ -12,7 +12,8 @@
 #include <mimetic/mimetic.h>
 #include <mimetic/utils.h>
 
-using namespace mcl::bn384;
+// for "ibe_mail_idniks.hpp"
+// using namespace mcl::bn384;
 using namespace std;
 
 namespace IBEMail{
@@ -278,17 +279,15 @@ namespace IBEMail{
 
     IBECipher edKey = encrypt(buf, id, params);
 
-    vector<unsigned char> b, c;
-    G1ToBytes(b, edKey.B);
-    G1ToBytes(c, edKey.C);
+    vector<unsigned char> C1;
+    G2ToBytes(C1, edKey.C1);
 
-    int len = edKey.a.size() + b.size() + c.size();
+    int len = C1.size() + edKey.C2.size();
     dst.write((const char*)&len, sizeof(len));
     ciphertext_len += sizeof(len);
 
-    dst.write((const char*)edKey.a.data(), edKey.a.size());
-    dst.write((const char*)b.data(), b.size());
-    dst.write((const char*)c.data(), b.size());
+    dst.write((const char*)C1.data(), C1.size());
+    dst.write((const char*)edKey.C2.data(), edKey.C2.size());
 
     ciphertext_len += len;
 
@@ -337,22 +336,20 @@ namespace IBEMail{
 
   //hybrid decryption with AEAD return plaintext length
   int MailUser::decryptHybrid(const EVP_CIPHER *cipher, ostream &dst, istream &src) const{
-    const int G1_SIZE = FP_SIZE*2 + 1;
+    const int G2_SIZE = FP_SIZE*4 + 1;
     int ciphertext_len = 0;
     src.read((char*)&ciphertext_len, sizeof(ciphertext_len));
 
     vector<unsigned char> edKey(ciphertext_len, 0);
     src.read((char*)&edKey[0], ciphertext_len);
 
-    vector<unsigned char> b(edKey.end() - G1_SIZE*2, edKey.end() - G1_SIZE);
-    vector<unsigned char> c(edKey.end() - G1_SIZE, edKey.end());
-    edKey.resize(ciphertext_len - G1_SIZE*2);
+    vector<unsigned char> C1_bytes(edKey.begin(), edKey.begin() + G2_SIZE);
+    vector<unsigned char> C2(edKey.begin() + G2_SIZE, edKey.end());
 
-    G1 B, C;
-    G1FromBytes(B, b);
-    G1FromBytes(C, c);
+    G2 C1;
+    G2FromBytes(C1, C1_bytes);
 
-    IBECipher encKey(edKey, B, C);
+    IBECipher encKey(C1, C2);
 
     vector<unsigned char> key = decrypt(encKey);
 
