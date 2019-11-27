@@ -131,7 +131,7 @@ int main(){
   }
 
   MailKGC kgc_cysec(sParam, sMKey);
-  MailUser recipient_cysec("okumura", kgc_cysec.getParams(), kgc_cysec.genUserKey("okumura"));
+  MailUser recipient_cysec("yogurtraisin", kgc_cysec.getParams(), kgc_cysec.genUserKey("yogurtraisin"));
   ifstream ifs_mail_cysec2(mail_file_cysec+".enc2");
   ofstream ofs_mail_cysec2(mail_file_cysec+".enc2.dec2");
   int len3 = recipient_cysec.decryptMail(algo, ofs_mail_cysec2, ifs_mail_cysec2);

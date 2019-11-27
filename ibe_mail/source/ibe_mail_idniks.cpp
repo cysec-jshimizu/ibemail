@@ -195,12 +195,26 @@ namespace IBEMail{
     vector<unsigned char> ya;
     vector<unsigned char> yb;
 
-    mpzUtil::mpzToBytes(xa, g2.x.a.getMpz(), FP_SIZE, 0);
-    mpzUtil::mpzToBytes(xb, g2.x.b.getMpz(), FP_SIZE, 0);
-    mpzUtil::mpzToBytes(ya, g2.y.a.getMpz(), FP_SIZE, 0);
-    mpzUtil::mpzToBytes(yb, g2.y.b.getMpz(), FP_SIZE, 0);
+    string str = g2.getStr();
+    stringstream ss{str};
 
-    bytes.reserve(FP_SIZE*4);
+    string xas, xbs, yas, ybs, zs;
+    getline(ss, zs, ' ');
+    getline(ss, xas, ' ');
+    getline(ss, xbs, ' ');
+    getline(ss, yas, ' ');
+    getline(ss, ybs, ' ');
+
+    unsigned char z = (unsigned char)zs[0] - '0';
+    mpz_class xa_mpz(xas), xb_mpz(xbs), ya_mpz(yas), yb_mpz(ybs);
+
+    mpzUtil::mpzToBytes(xa, xa_mpz, FP_SIZE, 0);
+    mpzUtil::mpzToBytes(xb, xb_mpz, FP_SIZE, 0);
+    mpzUtil::mpzToBytes(ya, ya_mpz, FP_SIZE, 0);
+    mpzUtil::mpzToBytes(yb, yb_mpz, FP_SIZE, 0);
+
+    bytes.reserve(FP_SIZE*4+1);
+    bytes.push_back(z);
     bytes.insert(bytes.end(), xa.begin(), xa.end());
     bytes.insert(bytes.end(), xb.begin(), xb.end());
     bytes.insert(bytes.end(), ya.begin(), ya.end());
@@ -246,10 +260,11 @@ namespace IBEMail{
 
   //TODO
   void G2FromBytes(G2 &g2, const vector<unsigned char> &bytes){
-    vector<unsigned char> xa_bytes(bytes.begin(), bytes.begin()+FP_SIZE);
-    vector<unsigned char> xb_bytes(bytes.begin()+FP_SIZE, bytes.begin()+(FP_SIZE*2));
-    vector<unsigned char> ya_bytes(bytes.begin()+(FP_SIZE*2), bytes.begin()+(FP_SIZE*3));
-    vector<unsigned char> yb_bytes(bytes.begin()+(FP_SIZE*3), bytes.begin()+(FP_SIZE*4));
+    char z = bytes[0] + '0';
+    vector<unsigned char> xa_bytes(bytes.begin()+1, bytes.begin()+FP_SIZE+1);
+    vector<unsigned char> xb_bytes(bytes.begin()+FP_SIZE+1, bytes.begin()+(FP_SIZE*2)+1);
+    vector<unsigned char> ya_bytes(bytes.begin()+(FP_SIZE*2)+1, bytes.begin()+(FP_SIZE*3)+1);
+    vector<unsigned char> yb_bytes(bytes.begin()+(FP_SIZE*3)+1, bytes.begin()+(FP_SIZE*4)+1);
 
     mpz_class xa, xb, ya, yb;
     mpzUtil::bytesToMpz(xa, xa_bytes);
@@ -257,19 +272,11 @@ namespace IBEMail{
     mpzUtil::bytesToMpz(ya, ya_bytes);
     mpzUtil::bytesToMpz(yb, yb_bytes);
 
-    G2::Fp x, y;
+    string str = "";
+    str.reserve(FP_SIZE*4 + 5);
+    str = str + z + " " + xa.get_str() + " " + xb.get_str() + " " + ya.get_str() + " " + yb.get_str();
 
-    Fp xa_fp, xb_fp;
-    xa_fp.setMpz(xa);
-    xb_fp.setMpz(xb);
-    x.set(xa_fp, xb_fp);
-
-    Fp ya_fp, yb_fp;
-    ya_fp.setMpz(ya);
-    yb_fp.setMpz(yb);
-    y.set(ya_fp, yb_fp);
-
-    g2.set(x, y);
+    g2.setStr(str);
   }
 
   void Fp12FromBytes(Fp12 &fp12, const vector<unsigned char> &bytes){

@@ -1,4 +1,4 @@
-#include <ibe_mail.hpp>
+#include <ibe_mail_idniks.hpp>
 #include <unistd.h>
 #include <iostream>
 #include <fstream>
