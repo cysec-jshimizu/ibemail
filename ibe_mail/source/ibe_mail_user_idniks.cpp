@@ -5,6 +5,8 @@
 #include <openssl/bio.h>
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <iterator>
 #include <stdexcept>
 #include <time.h>
 #include <random>
@@ -462,6 +464,9 @@ namespace IBEMail{
       return -1;
     }
 
+    cout << "params: " << endl;
+    cout << params.P.getStr(16) << endl;
+
     src.seekg(pos);
     return encryptMail(id, params, cipher, key, iv, aad, dst, src);
   }
@@ -502,5 +507,36 @@ namespace IBEMail{
     remove(tmpfile.c_str());
 
     return len;
+  }
+
+  // signature mail return signed text length
+  int MailUser::sign(std::ostream &dst, std::istream &src) const{
+    int signed_len = 0;
+
+    std::istreambuf_iterator<char> it(src);
+    std::istreambuf_iterator<char> last;
+    // std::string str(it, last);
+
+    // vector<unsigned char> message(str.begin(), str.end());
+    vector<unsigned char> message(it, last);
+
+    IBESignature sign = signature(message);
+
+    vector<unsigned char> R;
+    vector<unsigned char> S;
+
+    G2ToBytes(R, sign.R);
+    G1ToBytes(S, sign.S);
+
+    int len = R.size() + S.size();
+    dst.write((const char*)&len, sizeof(len));
+    signed_len += sizeof(len);
+
+    dst.write((const char*)R.data(), R.size());
+    dst.write((const char*)S.data(), S.size());
+    dst.write((const char*)message.data(), message.size());
+
+    signed_len = message.size() + len;
+    return signed_len;
   }
 }

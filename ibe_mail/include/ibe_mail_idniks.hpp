@@ -50,6 +50,14 @@ namespace IBEMail{
     int setBase64(const std::string b64);
   };
 
+  struct IBESignature : public IDNIKS::Signature{
+    IBESignature() = default;
+    IBESignature(const IDNIKS::Signature signature) : IDNIKS::Signature(signature){};
+    IBESignature(const G1 S, const G2 R) : IDNIKS::Signature(S, R){};
+
+    std::string getBase64() const;
+    int setBase64(const std::string b64);
+  };
 
   class MailKGC : public IDNIKS::KGC{
     private:
@@ -98,6 +106,7 @@ namespace IBEMail{
           const std::vector<unsigned char> &aad, std::ostream &dst, std::istream &src);
       int decryptMail(const EVP_CIPHER *cipher, std::ostream &dst, std::istream &src) const;
 
+      int sign(std::ostream &dst, std::istream &src) const;
   };
 
   void initIBEMail();
