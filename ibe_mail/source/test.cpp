@@ -145,26 +145,34 @@ int main(){
   std::string p(plain.begin(), plain.end());
   std::cout << p << std::endl;
 
+  // ifstream ifs_sign(file_name+".enc2");
+  // ofstream ofs_sign(file_name+".enc2"+".sign");
+  // int len4 = recipient.sign(ofs_sign, ifs_sign);
+  // ofs_sign.close();
+  // if(len4 < 0){
+  //   cout << "sign1 failed" << endl;
+  // } else {
+  //   cout << "sign1 ok" << endl;
+  // }
+
+  // ifstream ifs_sign2(mail_file+".enc2");
+  // ofstream ofs_sign2(mail_file+".enc2"+".sign");
+  // int len5 = recipient.sign(ofs_sign2, ifs_sign2);
+  // ofs_sign2.close();
+  // if(len5 < 0){
+  //   cout << "sign2 failed" << endl;
+  // } else {
+  //   cout << "sign2 ok" << endl;
+  // }
+
   std::cout << std::endl;
-  std::cout << "Sign: " << std::endl;
+  std::istreambuf_iterator<char> it(ifs_mail);
+  std::istreambuf_iterator<char> last;
+  vector<unsigned char> message(it, last);
+  string sign = recipient.sign(message);
 
-  ifstream ifs_sign(file_name+".enc2");
-  ofstream ofs_sign(file_name+".enc2"+".sign");
-  int len4 = recipient.sign(ofs_sign, ifs_sign);
-  ofs_sign.close();
-  if(len4 < 0){
-    cout << "sign1 failed" << endl;
-  } else {
-    cout << "sign1 ok" << endl;
+  cout << "verify:" << endl;
+  bool res = IBEMail::MailUser::verify(message, "k.kobayashi@yorechi.hoge", sign);
+  cout << " result:" << res << endl;
+  
   }
-
-  ifstream ifs_sign2(mail_file+".enc2");
-  ofstream ofs_sign2(mail_file+".enc2"+".sign");
-  int len5 = recipient.sign(ofs_sign2, ifs_sign2);
-  ofs_sign2.close();
-  if(len5 < 0){
-    cout << "sign2 failed" << endl;
-  } else {
-    cout << "sign2 ok" << endl;
-  }
-}

@@ -71,7 +71,8 @@ namespace IBEMail{
   int IBEParams::fromDNS(const std::string &domain){
     const string subdom = "__ibemailkey.";
     string dom = domain;
-    if(dom.size() > subdom.size() && !equal(begin(subdom), end(subdom), begin(dom))){
+
+    if(!equal(begin(subdom), end(subdom), begin(dom))){
       dom = subdom + dom;
     }
 
@@ -156,6 +157,24 @@ namespace IBEMail{
 
     G2DecodeBase64(this->C1, param["C1"]);
     base64::b64decode(this->C2, param["C2"]);
+
+    return 0;
+  }
+
+  string IBESignature::getBase64() const{
+    string S_b64, R_b64;
+    G1EncodeBase64(S_b64, this->S);
+    G2EncodeBase64(R_b64, this->R);
+
+    return "S=" + S_b64 + "; R=" + R_b64 + ";";
+  }
+
+  int IBESignature::setBase64(const string b64){
+    unordered_map<string, string> param;
+    parseParam(param, b64);
+
+    G1DecodeBase64(this->S, param["S"]);
+    G2DecodeBase64(this->R, param["R"]);
 
     return 0;
   }

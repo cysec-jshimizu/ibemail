@@ -10,6 +10,7 @@ namespace IBEMail{
   const std::string VERSION = "1.0";
   const std::string ALGOLITHM = "IDNIKS";
   const std::string CURVE = "bn254";
+  const int n = 1;
   // 256 -> 32 ; 384 -> 48;
   const size_t FP_SIZE = 32;
 
@@ -106,7 +107,8 @@ namespace IBEMail{
           const std::vector<unsigned char> &aad, std::ostream &dst, std::istream &src);
       int decryptMail(const EVP_CIPHER *cipher, std::ostream &dst, std::istream &src) const;
 
-      int sign(std::ostream &dst, std::istream &src) const;
+      std::string sign(const std::vector<unsigned char> &msg) const;
+      static bool verify(const std::vector<unsigned char> &msg, const std::string &address, const std::string &sign);
   };
 
   void initIBEMail();

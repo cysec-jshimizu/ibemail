@@ -509,34 +509,27 @@ namespace IBEMail{
     return len;
   }
 
-  // signature mail return signed text length
-  int MailUser::sign(std::ostream &dst, std::istream &src) const{
-    int signed_len = 0;
+  // return string base64-encoded sign
+  string MailUser::sign(const vector<unsigned char> &msg) const{
+    IBESignature sign = signature(msg);
 
-    std::istreambuf_iterator<char> it(src);
-    std::istreambuf_iterator<char> last;
-    // std::string str(it, last);
+    return sign.getBase64();
+  }
 
-    // vector<unsigned char> message(str.begin(), str.end());
-    vector<unsigned char> message(it, last);
+  // return boolean verification result
+  bool MailUser::verify(const vector<unsigned char> &msg, const string &address, const string &sign){
+    IBESignature signature;
+    signature.setBase64(sign);
 
-    IBESignature sign = signature(message);
+    size_t i = address.find_first_of("@");
+    string id(address.begin(), address.begin()+i);
+    string domain(address.begin()+i+1, address.end());
 
-    vector<unsigned char> R;
-    vector<unsigned char> S;
+    IBEParams params;
+    if(params.fromDNS(domain) == -1){
+      return false;
+    }
 
-    G2ToBytes(R, sign.R);
-    G1ToBytes(S, sign.S);
-
-    int len = R.size() + S.size();
-    dst.write((const char*)&len, sizeof(len));
-    signed_len += sizeof(len);
-
-    dst.write((const char*)R.data(), R.size());
-    dst.write((const char*)S.data(), S.size());
-    dst.write((const char*)message.data(), message.size());
-
-    signed_len = message.size() + len;
-    return signed_len;
+    return IDNIKS::User::verification(msg, id, params, signature);
   }
 }

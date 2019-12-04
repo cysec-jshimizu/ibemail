@@ -3,6 +3,9 @@
 #include <string>
 #include <stdexcept>
 #include <openssl/sha.h>
+#include <base64.hpp>
+
+#include <iostream>
 
 #define EMBEDDED_DEGREE 12
 
@@ -263,8 +266,12 @@ namespace IDNIKS{
     Fr k(rndk.get_str());
 
     // R = k*Q
+    // Rtmp : Rを直接使うとR.xがうまく出力できない(もしくはsetStrしたときに正しくR.xが代入されない)
+    //        RにRtmp.getStrからsetStrしてverificationでうまく動作するようにしてる
+    G2 Rtmp;
+    G2::mul(Rtmp, this->params.Q, k);
     G2 R;
-    G2::mul(R, this->params.Q, k);
+    R.setStr(Rtmp.getStr());
 
     //hash(msg)
     std::vector<unsigned char> msg_hash(SHA256_DIGEST_LENGTH, 0);
