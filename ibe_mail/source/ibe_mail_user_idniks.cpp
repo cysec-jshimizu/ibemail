@@ -464,9 +464,6 @@ namespace IBEMail{
       return -1;
     }
 
-    cout << "params: " << endl;
-    cout << params.P.getStr(16) << endl;
-
     src.seekg(pos);
     return encryptMail(id, params, cipher, key, iv, aad, dst, src);
   }
