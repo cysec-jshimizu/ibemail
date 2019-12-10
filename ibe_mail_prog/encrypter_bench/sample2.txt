@@ -1,0 +1,7 @@
+From: ubuntu@mail.yorechi.hoge
+To: ubuntu@mail.yorechi.hoge
+Message-Id: <20191205014711.5D416A238C@mail.yorechi.hoge>
+Date: Mon, 28 Jan 2019 10:47:11 +0900 (JST)
+Subject: testMail
+
+It is a test mail.
