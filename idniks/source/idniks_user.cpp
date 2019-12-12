@@ -5,7 +5,8 @@
 #include <openssl/sha.h>
 #include <base64.hpp>
 
-#include <iostream>
+#include <stdio.h>
+#include <chrono>
 
 #define EMBEDDED_DEGREE 12
 
@@ -113,6 +114,9 @@ namespace IDNIKS{
   }
 
   Cipher User::encrypt(const std::vector<unsigned char> &msg, const std::string &id, const KGCParams &params, size_t n, bool withPadding){
+    std::chrono::system_clock::time_point start, end;
+    start = std::chrono::system_clock::now();
+
     if(n < msg.size()) throw std::invalid_argument("IDNIKS::User::encrypt: n less than sizeof msg");
 
     //padding
@@ -180,6 +184,10 @@ namespace IDNIKS{
     mpzUtil::mpzToBytes(C2, cipher, n);
 
 
+    end = std::chrono::system_clock::now();
+    double time = static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0);
+    printf("idniks_encrypt_time: %lf[ms]\n", time);
+
     return {C1, C2};
   }
 
@@ -198,6 +206,9 @@ namespace IDNIKS{
   }
 
   std::vector<unsigned char> User::decrypt(const Cipher &c, size_t n, bool withPadding) const{
+    std::chrono::system_clock::time_point start, end;
+    start = std::chrono::system_clock::now();
+
     if(!belong) throw std::runtime_error("IDNIKS::User::decrypt: user don't have key");
 
     // decrypto
@@ -232,6 +243,10 @@ namespace IDNIKS{
         p.pop_back();
       }
     }
+
+    end = std::chrono::system_clock::now();
+    double time = static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0);
+    printf("idniks_decrypt_time: %lf[ms]\n", time);
 
     return p;
   }

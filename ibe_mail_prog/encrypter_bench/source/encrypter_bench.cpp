@@ -6,7 +6,6 @@
 
 #include <stdio.h>
 #include <chrono>
-// #include <time.h>
 
 using namespace std;
 using namespace IBEMail;
@@ -35,7 +34,7 @@ int main(){
   end = chrono::system_clock::now();
 
   double time = static_cast<double>(chrono::duration_cast<chrono::microseconds>(end - start).count() / 1000.0);
-  printf("time %lf[ms]\n", time);
+  printf("total_encrypt_time: %lf[ms]\n", time);
 }
 
 vector<unsigned char> getRndBytes(size_t len){

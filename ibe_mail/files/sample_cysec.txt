@@ -1,13 +1,13 @@
-Return-Path: <yogurtraisin@yorechi.hoge>
-X-Original-To: yogurtraisin@yorechi.hoge
-Delivered-To: yogurtraisin@yorechi.hoge
-Received: by yorechi.hoge (Postfix, from userid 0)
+Return-Path: <ubuntu@mail.yorechi.hoge>
+X-Original-To: ubuntu@mail.yorechi.hoge
+Delivered-To: ubuntu@mail.yorechi.hoge
+Received: by mail.yorechi.hoge (Postfix, from userid 0)
 	id 05F2DFE3; Thu,  2 Aug 2018 09:39:37 +0000 (UTC)
-Received: from 35ce5a2d7d80 (yorechi.hoge [127.0.0.1])
-	by yorechi.hoge (Postfix) with SMTP id 85BEAFE0
-	for <yogurtraisin@yorechi.hoge>; Thu,  2 Aug 2018 09:30:38 +0000 (UTC)
-From: <yogurtraisin@yorechi.hoge>
-To: <yogurtraisin@yorechi.hoge>
+Received: from 35ce5a2d7d80 (mail.yorechi.hoge [127.0.0.1])
+	by mail.yorechi.hoge (Postfix) with SMTP id 85BEAFE0
+	for <ubuntu@mail.yorechi.hoge>; Thu,  2 Aug 2018 09:30:38 +0000 (UTC)
+From: <ubuntu@mail.yorechi.hoge>
+To: <ubuntu@mail.yorechi.hoge>
 Date: Thu,  2 Aug 2018 09:30:38 +0000 (UTC)
 Message-Id: <073f.0003.0000@35ce5a2d7d80>
 Subject: testMail

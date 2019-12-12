@@ -63,7 +63,7 @@ int main(){
   // else cout << "v: ng";
   // cout << endl;
 
-  std::string id = "k.kobayashi";
+  std::string id = "kobayashi";
   std::cout << "id: " << id << std::endl;
   std::string msg = "It is a plaintext.";
   msg = msg + msg + msg;
@@ -131,7 +131,7 @@ int main(){
   }
 
   MailKGC kgc_cysec(sParam, sMKey);
-  MailUser recipient_cysec("yogurtraisin", kgc_cysec.getParams(), kgc_cysec.genUserKey("yogurtraisin"));
+  MailUser recipient_cysec("ubuntu", kgc_cysec.getParams(), kgc_cysec.genUserKey("ubuntu"));
   ifstream ifs_mail_cysec2(mail_file_cysec+".enc2");
   ofstream ofs_mail_cysec2(mail_file_cysec+".enc2.dec2");
   int len3 = recipient_cysec.decryptMail(algo, ofs_mail_cysec2, ifs_mail_cysec2);
@@ -172,7 +172,7 @@ int main(){
   string sign = recipient.sign(message);
 
   cout << "verify:" << endl;
-  bool res = IBEMail::MailUser::verify(message, "k.kobayashi@yorechi.hoge", sign);
+  bool res = IBEMail::MailUser::verify(message, "kobayashi@mail.yorechi.hoge", sign);
   cout << " result:" << res << endl;
   
   }
