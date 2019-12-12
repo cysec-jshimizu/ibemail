@@ -1,11 +1,11 @@
 #include "idniks.hpp"
 #include <mpz_util.hpp>
-#include <mcl/bn256.hpp>
-// #include <mcl/bn384.hpp>
+// #include <mcl/bn256.hpp>
+#include <mcl/bn384.hpp>
 #include <iostream>
 
-using namespace mcl::bn256;
-// using namespace mcl::bn384;
+// using namespace mcl::bn256;
+using namespace mcl::bn384;
 using namespace IDNIKS;
 
 int main(){

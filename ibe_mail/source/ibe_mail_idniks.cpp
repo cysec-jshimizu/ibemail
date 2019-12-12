@@ -181,7 +181,8 @@ namespace IBEMail{
 
 
   void initIBEMail(){
-    initPairing();
+    // initPairing(mcl::BN254);
+    initPairing(mcl::BN381_1);
   }
 
   void G1ToBytes(vector<unsigned char> &bytes, const G1 &g1){

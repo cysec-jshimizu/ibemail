@@ -14,7 +14,8 @@ using namespace IBEMail;
 using namespace std;
 
 int main(){
-  initPairing();
+  // initPairing();
+  initIBEMail();
 
   //IBEParams hoge;
   //hoge.fromDNS("__ibemailkey.sub1.cysec-lab.org");
