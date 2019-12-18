@@ -1,12 +1,12 @@
 #ifndef _INC_IDNIKS
 #define _INC_IDNIKS
 
-#include <mcl/bn256.hpp>
-// #include <mcl/bn384.hpp>
+// #include <mcl/bn256.hpp>
+#include <mcl/bn384.hpp>
 #include <openssl/sha.h>
 
-using namespace mcl::bn256;
-// using namespace mcl::bn384;
+// using namespace mcl::bn256;
+using namespace mcl::bn384;
 
 namespace IDNIKS{
   struct KGCParams{

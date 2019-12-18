@@ -22,6 +22,8 @@ int main(){
   string ibemailDir = home + "/.ibemail";
 
   string tmpFile = ibemailDir + "/.ibemail.tmp";
+  // string tmpFile = ibemailDir + tmpnam(nullptr);
+  cout << tmpFile << endl;
   ofstream tmpOut(tmpFile);
   char buf[BUF_SIZE];
   while(!cin.eof()){
@@ -38,6 +40,7 @@ int main(){
     logStream.write(buf, tmpIn.gcount());
   }
   logStream << endl;
+  logStream << tmpFile << endl;
   tmpIn.clear();
   tmpIn.seekg(0);
 
@@ -76,8 +79,10 @@ int main(){
     return -1;
   }
   remove(tmpFile.c_str());
-  end = chrono::system_clock::now();
 
+  end = chrono::system_clock::now();
+  time_t end_time = chrono::system_clock::to_time_t(end);
+  logStream << "end: " << ctime(&end_time) << endl;
   double time = static_cast<double>(chrono::duration_cast<chrono::microseconds>(end - start).count() / 1000.0);
   printf("total_decrypt_time: %lf[ms]\n", time);
 }

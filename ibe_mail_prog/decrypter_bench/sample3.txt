@@ -1,0 +1,25 @@
+Return-Path: <ubuntu@yorechi.hoge>
+X-Original-To: ubuntu@mail.yorechi.hoge
+Delivered-To: ubuntu@mail.yorechi.hoge
+Received: by mail.yorechi.hoge (Postfix, from userid 1000)
+        id E407F43DBB; Fri, 13 Dec 2019 00:40:34 +0900 (JST)
+From: ubuntu@mail.yorechi.hoge
+To: ubuntu@mail.yorechi.hoge
+Subject: encrypted mail
+Mime-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; 
+        filename="ibemail.cipher"
+Content-Type: application/ibemail-encrypted
+Message-Id: <20191212154034.E407F43DBB@mail.yorechi.hoge>
+Date: Fri, 13 Dec 2019 00:40:34 +0900 (JST)
+
+DQEAAAEMF+54fNopTEURX3Z8vRiSDTs9IDlz/nuc4TC1k6Mbz33cxdZgSSeZpsD/Hz8COcUMpPCa
+TKJ9+Vizo+HM0R4W02jOFCRl5YXUcWSaiN8KtROyGPbEMmKeScWIT43oIsgOmCGKjFEUtXcwF4I/
+s7itaIpm5/zu142eO7mP+BlCRFTZXT/TZzWkeVU3Syy+JAILVjKmuZG5IW5q0L5RW2r2KDzRm0Gt
+3XxOl6tlAwH6V3/qBx2zC4f1S5dec0595lgVHLz73KQ48o6Y8bL2zHXkUKXgpvI8tEhAxeE5EhUC
+Dh8lE48dka9YkKM+qOfu9E/AwOf2qxg2IYjZwpHNZf49wHE0PoHl46rw2nTxyAAAAPBHJzq47gfH
+AlyGcBgcsQo6VoqJDruA2wmsicHzZyY4aAy0UwuxfHydiAwN8LcuhLkzcPHPBwy5FMnYnXvqIJUX
+rMdPdhFk/yVPzVwBuVtcMu7S0Q7jq0h4cmDHGIdtLlyNQskE6KRDmVqwCSpMu/Zs5LsMlMbB7uaH
+TetlXrORjZGPmg87SKsXGHVU5vFN4SMmndYIR5Dhm10PjwSGGtl1+TgdV1nhVdrXCefhTgAqDA14
+G8AF1aIOEybU56l2T8PeT898j+/ZvDztDQrbEZYdQcIURWCqVA==

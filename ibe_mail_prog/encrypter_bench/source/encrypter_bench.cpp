@@ -27,8 +27,10 @@ int main(){
   const EVP_CIPHER *algo = EVP_aes_256_gcm();
   MailUser::encryptMail(algo, key, aad, ofs, cin);
 
-  string sendmail = "sendmail -it";
-  system((sendmail + " < " + tmpFile).c_str());
+  for (int i = 0; i < 3; i++) {
+    string sendmail = "sendmail -it";
+    system((sendmail + " < " + tmpFile).c_str());
+  }
   remove(tmpFile.c_str());
 
   end = chrono::system_clock::now();

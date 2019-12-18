@@ -9,10 +9,10 @@
 namespace IBEMail{
   const std::string VERSION = "1.0";
   const std::string ALGOLITHM = "IDNIKS";
-  const std::string CURVE = "bn254";
+  const std::string CURVE = "bn381";
   const int n = 1;
   // 256 -> 32 ; 384 -> 48;
-  const size_t FP_SIZE = 32;
+  const size_t FP_SIZE = 48;
 
   struct IBEParams : public IDNIKS::KGCParams{
     IBEParams() = default;
