@@ -4,8 +4,8 @@ IDベース暗号を用いた電子メールシステム
 
 ## 概要
 
-* bb2ibe
-  * BB2IBEプログラム
+* idniks
+  * idniksプログラム
 
 * ibe_mail
   * IBE使ってメール処理するプログラム

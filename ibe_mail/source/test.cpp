@@ -7,18 +7,11 @@
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 
-// for "ibe_mail_bb2.hpp"
-// using namespace mcl::bn384;
-// using namespace BB2;
 using namespace IBEMail;
 using namespace std;
 
 int main(){
   initPairing();
-
-  //IBEParams hoge;
-  //hoge.fromDNS("__ibemailkey.sub1.cysec-lab.org");
-  //cout << hoge.getRecode() << endl;
 
   string paramFile = "files/params.txt";
   ifstream paramIfs(paramFile);
@@ -55,15 +48,7 @@ int main(){
   else cout << "params: ng";
   cout << endl;
 
-  // string b64v;
-  // Fp12EncodeBase64(b64v, params.v);
-  // Fp12 v2;
-  // Fp12DecodeBase64(v2, b64v);
-  // if(params.v == v2) cout << "v: ok";
-  // else cout << "v: ng";
-  // cout << endl;
-
-  std::string id = "k.kobayashi";
+  std::string id = "hoge";
   std::cout << "id: " << id << std::endl;
   std::string msg = "It is a plaintext.";
   msg = msg + msg + msg;
@@ -172,7 +157,7 @@ int main(){
   string sign = recipient.sign(message);
 
   cout << "verify:" << endl;
-  bool res = IBEMail::MailUser::verify(message, "k.kobayashi@yorechi.hoge", sign);
+  bool res = IBEMail::MailUser::verify(message, "hoge@hoge.fuga", sign);
   cout << " result:" << res << endl;
   
   }

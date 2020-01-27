@@ -1,17 +1,17 @@
-Return-Path: <ubuntu@yorechi.hoge>
-X-Original-To: ubuntu@mail.yorechi.hoge
-Delivered-To: ubuntu@mail.yorechi.hoge
-Received: by mail.yorechi.hoge (Postfix, from userid 1000)
+Return-Path: <hoge@hoge.fuga>
+X-Original-To: hoge@hoge.fuga
+Delivered-To: hoge@hoge.fuga
+Received: by mail.hoge (Postfix, from userid 1000)
 	id D2EB743DBE; Thu,  5 Dec 2019 22:40:39 +0900 (JST)
-From: ubuntu@mail.yorechi.hoge
-To: ubuntu@mail.yorechi.hoge
+From: hoge@hoge.fuga
+To: hoge@hoge.fuga
 Subject: encrypted mail
 Mime-Version: 1.0
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; 
 	filename="ibemail.cipher"
 Content-Type: application/ibemail-encrypted
-Message-Id: <20191205134039.D2EB743DBE@mail.yorechi.hoge>
+Message-Id: <20191205134039.D2EB743DBE@hoge.fuga>
 Date: Thu,  5 Dec 2019 22:40:39 +0900 (JST)
 
 zQAAAAEPx+pPlvLfIKveNEJKCa0UCeJ6gzC/I4GXBjXVjAA97x21j8K5DUXSSmBlmyYsQbn8enwa
