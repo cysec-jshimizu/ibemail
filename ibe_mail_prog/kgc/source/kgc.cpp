@@ -1,4 +1,4 @@
-#include <ibe_mail.hpp>
+#include <ibe_mail_idniks.hpp>
 #include <unistd.h>
 #include <iostream>
 #include <fstream>
@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
       break;
 
     default:
-      printf("Usage: %s [-s] [-g IDs]\n", argv[0]);
+      printf("Usage: %s [-s] [-g hoge@fuga.com]\n", argv[0]);
       break;
   }
 }

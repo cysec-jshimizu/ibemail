@@ -1,5 +1,5 @@
-From: user2@jshimizu2.cent
-To: user1@jshimizu1.cent
+From: user1@jshimizu1.cent
+To: user2@jshimizu2.cent
 Subject: testMail
 
 It is a test mail.

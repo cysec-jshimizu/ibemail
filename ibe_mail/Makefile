@@ -1,6 +1,6 @@
 COMPILER  = g++
 CFLAGS    = -g -MMD -MP -Wall -Wextra -Winit-self -Wno-missing-field-initializers -std=c++11
-LDFLAGS   = -lmimetic -lmcl -lresolv
+LDFLAGS   = -lmimetic -lmcl -lresolv -lcurl
 LIBS      = -lgmp -lcrypto
 INCLUDE   = -I./include -I/usr/local/include
 TARGET    = ./bin/$(shell basename `readlink -f .`)
@@ -18,6 +18,7 @@ DEPENDS   = $(OBJECTS:.o=.d)
 MAKELIB   = $(OBJDIR)/libibemail.a
 
 $(TARGET): $(OBJECTS) $(LIBS)
+	-mkdir -p ./bin
 	$(COMPILER) -o $@ $^ $(LDFLAGS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp

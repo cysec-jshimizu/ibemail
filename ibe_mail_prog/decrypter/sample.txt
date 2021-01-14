@@ -1,0 +1,24 @@
+Return-Path: <hoge@hoge.fuga>
+X-Original-To: hoge@hoge.fuga
+Delivered-To: hoge@hoge.fuga
+Received: by mail.hoge (Postfix, from userid 1000)
+	id D2EB743DBE; Thu,  5 Dec 2019 22:40:39 +0900 (JST)
+From: hoge@hoge.fuga
+To: hoge@hoge.fuga
+Subject: encrypted mail
+Mime-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; 
+	filename="ibemail.cipher"
+Content-Type: application/ibemail-encrypted
+Message-Id: <20191205134039.D2EB743DBE@hoge.fuga>
+Date: Thu,  5 Dec 2019 22:40:39 +0900 (JST)
+
+zQAAAAEPx+pPlvLfIKveNEJKCa0UCeJ6gzC/I4GXBjXVjAA97x21j8K5DUXSSmBlmyYsQbn8enwa
+v46vXmpHFxZewWswGG6bdb9AXVXpRCQt2HnFAmcEJSOtG+Jd8x8Vxc9ktCkHsEJNZ00Blt00Epi4
+IHXtl5mYywUGrBTpcri5B5heHj/bBe9XVkF6q91dkwMnrrqsg2w3D83mIRQ6S581mOGJzeny7t/P
+Jdg/6wTUxJbLiript1Y4/lS3ZZJtgcm/OoeJRsmXKZvtZIInAufIAAAAIiTVCpdc5UlNuHq+q6ea
+c9f3TmDM9fnOmJZBNC/kX0PC2C8rAbiGO1zzE/r3iq+ViTRbW+n671Z1LiMS/yQiV48k2+yHUtf/
+78w06wIMczi98cioy3e0lIS+GOEv/zqfCH86qj6UbL8scJWIVGsP+GlE/Q5laVsTT1O+oqj390vL
+n/dRAPLl5Xwf6ePySMJO7RncQ/SmPXTTkUg8aXuvYRxZuos0qvfzU3xCu/ZnPjPowoWjAbSOXCLS
+1RBuBa96wFCX/jU3NE+uEIoTw/z6ZVBREKv5tyna

@@ -1,23 +1,17 @@
-#include "ibe_mail.hpp"
+#include "ibe_mail_idniks.hpp"
 #include <base64.hpp>
 #include <string>
 #include <iostream>
 #include <fstream>
-
+#include <chrono>
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 
-using namespace mcl::bn256;
-using namespace BB2;
 using namespace IBEMail;
 using namespace std;
 
 int main(){
   initPairing();
-
-  //IBEParams hoge;
-  //hoge.fromDNS("__ibemailkey.sub1.cysec-lab.org");
-  //cout << hoge.getRecode() << endl;
 
   string paramFile = "files/params.txt";
   ifstream paramIfs(paramFile);
@@ -54,15 +48,7 @@ int main(){
   else cout << "params: ng";
   cout << endl;
 
-  string b64v;
-  Fp12EncodeBase64(b64v, params.v);
-  Fp12 v2;
-  Fp12DecodeBase64(v2, b64v);
-  if(params.v == v2) cout << "v: ok";
-  else cout << "v: ng";
-  cout << endl;
-
-  std::string id = "okumura";
+  std::string id = "hoge";
   std::cout << "id: " << id << std::endl;
   std::string msg = "It is a plaintext.";
   msg = msg + msg + msg;
@@ -87,10 +73,17 @@ int main(){
   ofs_mail.close();
   cout << "encryptMail1 ok" << endl;
 
-  string mail_file_cysec = "files/sample_cysec.txt";
+  // string mail_file_cysec = "files/sample_cysec.txt";
+  string mail_file_cysec = "files/sample_jshimizu.txt";
   ifstream ifs_mail_cysec(mail_file_cysec);
   ofstream ofs_mail_cysec(mail_file_cysec+".enc2");
+  chrono::system_clock::time_point start, end;
+  start = chrono::system_clock::now();
   MailUser::encryptMail(algo, key, aad, ofs_mail_cysec, ifs_mail_cysec);
+  end = chrono::system_clock::now();
+  double elapsed = chrono::duration_cast<chrono::microseconds>(end-start).count();
+  cout << "encrypt " << elapsed/1000 << " milliseconds" << endl;
+
   ofs_mail_cysec.close();
   cout << "encryptMail2 ok" << endl;
 
@@ -130,10 +123,15 @@ int main(){
   }
 
   MailKGC kgc_cysec(sParam, sMKey);
-  MailUser recipient_cysec("okumura", kgc_cysec.getParams(), kgc_cysec.genUserKey("okumura"));
+  MailUser recipient_cysec("user2@jshimizu2.cent", kgc_cysec.getParams(), kgc_cysec.genUserKey("user2@jshimizu2.cent"));
   ifstream ifs_mail_cysec2(mail_file_cysec+".enc2");
   ofstream ofs_mail_cysec2(mail_file_cysec+".enc2.dec2");
+  start = chrono::system_clock::now();
   int len3 = recipient_cysec.decryptMail(algo, ofs_mail_cysec2, ifs_mail_cysec2);
+  end = chrono::system_clock::now();
+  elapsed = chrono::duration_cast<chrono::microseconds>(end-start).count();
+  cout << "decrypt " << elapsed/1000 << " milliseconds" << endl;
+
   if(len3 < 0){
     cout << "decrypt failed" << endl;
   } else {
@@ -143,4 +141,64 @@ int main(){
   std::vector<unsigned char> plain = recipient.decrypt(cipher);
   std::string p(plain.begin(), plain.end());
   std::cout << p << std::endl;
+
+  // ifstream ifs_sign(file_name+".enc2");
+  // ofstream ofs_sign(file_name+".enc2"+".sign");
+  // int len4 = recipient.sign(ofs_sign, ifs_sign);
+  // ofs_sign.close();
+  // if(len4 < 0){
+  //   cout << "sign1 failed" << endl;
+  // } else {
+  //   cout << "sign1 ok" << endl;
+  // }
+
+  // ifstream ifs_sign2(mail_file+".enc2");
+  // ofstream ofs_sign2(mail_file+".enc2"+".sign");
+  // int len5 = recipient.sign(ofs_sign2, ifs_sign2);
+  // ofs_sign2.close();
+  // if(len5 < 0){
+  //   cout << "sign2 failed" << endl;
+  // } else {
+  //   cout << "sign2 ok" << endl;
+  // }
+
+  std::cout << std::endl;
+  // std::istreambuf_iterator<char> it(ifs_mail);
+  std::istreambuf_iterator<char> it(ifs_mail_cysec);
+  std::istreambuf_iterator<char> last;
+  vector<unsigned char> message(it, last);
+  // string sign = recipient.sign(message);
+  string sign = recipient_cysec.sign(message);
+  cout << sign << endl;
+
+  cout << "verify:" << endl;
+  bool res = IBEMail::MailUser::verify(message, "user2@jshimizu2.cent", "jshimizu2.cent", sign);
+  cout << " result:" << res << endl;
+  cout << endl;
+
+  ifstream sign_in("files/sample_jshimizu2.txt");
+  ofstream sign_out("files/sample_jshimizu2.txt.sign");
+  MailUser testuser("user2@jshimizu2.cent", kgc_cysec.getParams(), kgc_cysec.genUserKey("user2@jshimizu2.cent"));
+
+  start = chrono::system_clock::now();
+  testuser.signMail(sign_out, sign_in);
+  end = chrono::system_clock::now();
+  elapsed = chrono::duration_cast<chrono::microseconds>(end-start).count();
+  cout << "sign " << elapsed/1000 << " milliseconds" << endl;
+
+  cout << "signMail ok" << endl;
+  sign_out.close();
+
+  ifstream verify_in("files/sample_jshimizu2.txt.sign");
+  ofstream verify_out("files/sample_jshimizu2.txt.sign.verify");
+  start = chrono::system_clock::now();
+  int result = MailUser::verifyMail(verify_out, verify_in);
+  end = chrono::system_clock::now();
+  elapsed = chrono::duration_cast<chrono::microseconds>(end-start).count();
+  cout << "verify " << elapsed/1000 << " milliseconds" << endl;
+  if (result == 0){
+    cout << "verifyMail ok" << endl;
+  } else {
+    cout << "verifyMail failed" << endl;
+  }
 }

@@ -1,5 +1,5 @@
 COMPILER  = g++
-CFLAGS    = -O3 -MMD -MP -Wall -Wextra -Winit-self -Wno-missing-field-initializers -std=c++11
+CFLAGS    = -g -MMD -MP -Wall -Wextra -Winit-self -Wno-missing-field-initializers -std=c++11
 LDFLAGS   = -L./lib -libemail -lmcl -lresolv -lmimetic -lcurl
 LIBS      = -lgmp -lcrypto -lssl
 INCLUDE   = -I./include -I/usr/local/include
@@ -30,4 +30,3 @@ clean:
 	-rm -f $(OBJECTS) $(DEPENDS) $(TARGET)
 
 -include $(DEPENDS)
-

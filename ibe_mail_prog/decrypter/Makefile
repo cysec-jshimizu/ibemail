@@ -1,6 +1,6 @@
 COMPILER  = g++
 CFLAGS    = -g -MMD -MP -Wall -Wextra -Winit-self -Wno-missing-field-initializers -std=c++11
-LDFLAGS   = -L./lib -lmcl -libemail -lresolv -lmimetic
+LDFLAGS   = -L./lib -lmcl -libemail -lresolv -lmimetic -lcurl
 LIBS      = -lgmp -lcrypto -lssl
 INCLUDE   = -I./include -I/usr/local/include
 TARGET    = ./bin/$(shell basename `readlink -f .`)
@@ -17,6 +17,7 @@ OBJECTS   = $(addprefix $(OBJDIR)/, $(notdir $(SOURCES:.cpp=.o)))
 DEPENDS   = $(OBJECTS:.o=.d)
 
 $(TARGET): $(OBJECTS) $(LIBS)
+	mkdir -p ./bin
 	$(COMPILER) -o $@ $^ $(LDFLAGS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp

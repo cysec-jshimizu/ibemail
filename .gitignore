@@ -1,2 +1,9 @@
 **/bin/*
+**/**/bin/*
 **/obj/*
+**/**/obj/*
+ibe_mail/files/*enc*
+ibe_mail/files/*sign*
+ibe_mail_prog/kgc/*.param
+ibe_mail_prog/kgc/*.userkey*
+.vscode/

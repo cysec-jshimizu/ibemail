@@ -1,4 +1,4 @@
-#include <ibe_mail.hpp>
+#include <ibe_mail_idniks.hpp>
 #include <fstream>
 #include <time.h>
 #include <stdlib.h>
@@ -35,14 +35,21 @@ int main(){
   tmpIn.clear();
   tmpIn.seekg(0);
 
-  string mailDir = home + "/MailDir/";
+  string mailDir = home + "/Mail/";
   time_t now = time(NULL);
   string date(32, '\0');
   size_t l = strftime(&date[0], date.size(), "%Y%m%d%H%M%S", localtime(&now));
   date.resize(l);
-  ofstream mailStream(mailDir + date);
+  string decFile = mailDir + date + "_tmp";
+  ofstream mailStream(decFile);
 
-  const string keyFile = ibemailDir + "/decryptkey";
+  // Toのドメイン+".decrypter"
+  int pos = tmpIn.tellg();
+  mimetic::MimeEntity me(tmpIn);
+  tmpIn.seekg(pos);
+  string to_domain = me.header().to()[0].mailbox().domain();
+  const string keyFile = ibemailDir + "/" + to_domain + ".decryptkey";
+  // const string keyFile = ibemailDir + "/decryptkey";
   ifstream keyFileStream(keyFile);
   if(!keyFileStream.is_open()){
     logStream << "Error: can't open keyfile." << endl << endl;
@@ -69,5 +76,14 @@ int main(){
     remove(tmpFile.c_str());
     return -1;
   }
+
+  mailStream.close();
+  ifstream signIn(decFile);
+  ofstream signOut(mailDir + date);
+  MailUser::verifyMail(signOut, signIn);
+
   remove(tmpFile.c_str());
+  remove(decFile.c_str());
+
+  return 0;
 }
