@@ -19,3 +19,4 @@ IDベース暗号を用いた電子メールシステム
 * [mcl](https://github.com/herumi/mcl)
 * [OpenSSL](https://www.openssl.org/) v1.1.0以上
 * [mimetic](http://www.codesink.org/mimetic_mime_library.html)
+* [libcurl](https://curl.se/libcurl/)
