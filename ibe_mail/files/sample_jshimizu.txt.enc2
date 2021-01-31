@@ -1,0 +1,15 @@
+From: user1@jshimizu1.cent
+To: user2@jshimizu2.cent
+Subject: encrypted mail
+Mime-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; 
+	filename="ibemail.cipher"
+Content-Type: application/ibemail-encrypted
+
+zQAAAAEDWniJjuzbKXZUVV+wAC9Xm7ant/Sx66J49zrBrqNU1AneNA6y0YubdQcWvT0TtJEYJSvY
+/70W7J66jOvPJQx5GT8CUa2alqwxCshjrWSVDWPCfEWdRl3V6h0YNuhcNcUJK9yP3eaViQoM57cr
+P4mWoM82l0cifkTwo9nxRIY50OkHGOzSxyVVoc161nIG+gJITU/4fmbt276b+98x4z3jr4ihAfo2
+8Q7Shr8yq+y/IPeivj5jIZAu3r/M2J2OvCxPYxdX1Vt+QMYFqlFqAAAAZKKQO/eg9zSpmGUM47s1
+C3WBeQ5UdF+8cm/B25Dv2ipbee0bj2Rc1epbWU2nWUIWAReQwlplKtStaGfu3T2NOztkiZFGXicU
+KYBnNYX5GZUFPRnp9/YYGkXgMc7pP7n1qT6draQx8fmn8YDzSfaMcPak3dMEEMSIcq4=
